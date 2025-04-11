@@ -1,0 +1,43 @@
+@startuml
+actor Employee
+participant EmployeeController
+participant EmployeeRepository
+
+Employee -> EmployeeController: all()
+EmployeeController -> EmployeeRepository: findAll()
+EmployeeRepository --> EmployeeController: List<Employee>
+EmployeeController --> Employee: List<Employee>
+
+Employee -> EmployeeController: newEmployee(newEmployee : Employee)
+EmployeeController -> EmployeeRepository: save(newEmployee)
+EmployeeRepository --> EmployeeController: Employee
+EmployeeController --> Employee: Employee
+
+Employee -> EmployeeController: getEmployee(id : Long)
+EmployeeController -> EmployeeRepository: findById(id)
+alt Employee exist
+EmployeeRepository --> EmployeeController: Employee
+EmployeeController --> Employee: Employee
+else Employee not exist
+EmployeeController -> Employee: throws EmployeeNotFoundException(id)
+end
+
+Employee -> EmployeeController: replaceEmployee(newEmployee : Employee, id : long)
+EmployeeController -> EmployeeRepository: findById(id)
+alt Employee exist
+EmployeeController -> EmployeeRepository: save(employee)
+EmployeeRepository --> EmployeeController: Employee
+EmployeeController --> Employee: Employee
+else Employee not exist
+EmployeeController -> EmployeeRepository: save(newEmployee)
+EmployeeRepository --> EmployeeController: Employee
+EmployeeController --> Employee: Employee
+end
+
+Employee -> EmployeeController: deleteEmployee(id : Long)
+EmployeeController -> EmployeeRepository: findById(id)
+EmployeeRepository --> EmployeeController: void
+EmployeeController --> Employee: void
+
+
+@enduml
